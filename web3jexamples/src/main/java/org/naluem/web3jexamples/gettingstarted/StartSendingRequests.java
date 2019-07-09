@@ -15,10 +15,38 @@
  */
 package org.naluem.web3jexamples.gettingstarted;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.http.HttpService;
+
 /**
  *
  * @author mldu
  */
 public class StartSendingRequests {
-	
+
+	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+		final String url = "https://morden.infura.io/your-token";
+		final HttpService httpService = new HttpService(url);
+
+		// To send synchronous requests:
+		Web3j web3j = Web3j.build(httpService);
+		Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
+		String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+
+		//To send asynchronous requests using CompletableFuture
+		web3ClientVersion=web3j.web3ClientVersion().sendAsync().get();
+		clientVersion=web3ClientVersion.getWeb3ClientVersion();
+
+		// To use RxJava Flowable
+		web3j.web3ClientVersion().flowable().subscribe(x -> {
+			String clientVersion1 = x.getWeb3ClientVersion();
+			// ...
+		});
+		
+		web3j.shutdown();
+	}
+
 }

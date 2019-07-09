@@ -27,7 +27,9 @@ public class StartClient {
 	public static void main(String[] args) {
 		final String url = "https://morden.infura.io/your-token";
 		final HttpService httpService = new HttpService(url);
+
 		Web3j web3j = Web3j.build(httpService);
+
 		web3j.shutdown();
 	}
 
